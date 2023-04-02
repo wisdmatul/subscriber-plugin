@@ -157,7 +157,7 @@ class Subscriber_Email {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-		$this->loader->add_action('admin_menu', $plugin_admin , 'my_add_menu_pages');
+		$this->loader->add_action('admin_menu', $plugin_admin , 'register_menu_page');
 		$this->loader->add_action('admin_init', $plugin_admin, 'register_set');
 	}
 

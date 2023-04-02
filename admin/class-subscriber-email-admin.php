@@ -131,8 +131,8 @@ class Subscriber_Email_Admin {
 	function register_set()
 	{
 		register_setting('my_plugin_settings_group', 'no_of_posts');
-		add_setting_section('subs_settings', 'Subscriber Mail Setting', '', 'subscribe-me-settings');
-		add_settings_field('no_of_posts', 'No of Posts', array($this, 'no_of_posts_callback'), 'subscribe-me-settings', 'subs_settings')
+		add_settings_section('subs_settings', 'Subscription Mail Settings', '', 'subscribe-me-settings');
+		add_settings_field('no_of_posts', 'No of Posts', array($this, 'no_of_posts_callback'), 'subscribe-me-settings', 'subs_settings');
 	}
 
 	public function no_of_posts_callback()

@@ -172,7 +172,7 @@ class Subscriber_Email_Public {
 		}
 	}
 
-	function sending_mail(to)
+	function sending_mail($to)
 	{
 		$subject = 'Congratulations! You are Subscribed';
 		$summary = $this->get_daily_post_details();
