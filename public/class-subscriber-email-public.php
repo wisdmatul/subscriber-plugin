@@ -100,4 +100,48 @@ class Subscriber_Email_Public {
 
 	}
 
+	//TO define shortcode
+	public function subscriber_emails_shortcodes()
+	{
+		add_shortcode('my-shortcode', array($this, 'email_subscriber_form_shortcode'));
+	}
+
+	//callback for shortcode
+	function email_subscriber_form_shortcode()
+	{
+		$output = '<div class="wrap subs-wrap mail-form">
+                    <form class="subscribe-me-form" method="post">
+                        <input type="hidden" name="action" value="subs_form">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" required/><br />
+                        <input type="submit" name="submit" id="subscribe-button" value="Subscribe Me"/>
+                    </form>
+                </div>';
+		return $output;
+	}
+
+	//to show form on head section of every page
+	function form_to_header()
+	{
+		echo do_shortcode('[my-shortcode]');
+	}
+
+	//save subscriber email to database
+	function subscriber_database()
+	{
+		//to check input pattern
+		if(isset($_POST['email']))
+		{
+			$email = sanitize_email($_POST['email']);
+			$pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+
+			if(preg_match($pattern, $email))
+			{
+				if (isset($_POST['submit']))
+				{
+					$subscribed_mails = get_option('subscribed_mails');
+				}
+			}
+		}
+	}
 }
