@@ -140,8 +140,82 @@ class Subscriber_Email_Public {
 				if (isset($_POST['submit']))
 				{
 					$subscribed_mails = get_option('subscribed_mails');
+
+					if (!$subscribed_mails)
+					{
+						$subscribed_mails = array();
+					}
+
+					if (in_array($email, $subscribed_mails))
+					{
+						echo '<script>alert("You are already subscribed!");</script>';
+					}
+
+					else
+					{
+						$subscribed_mails[] = $email;
+						update_option('subscribed_mails', $subscribed_mails);
+
+						// Display a success message
+						echo '<script>alert("You have been subscribed Successfully!");</script>';
+
+						//To send latest post details
+						$this->sending_mail($email);
+					}
 				}
 			}
+			else
+			{
+				//For invalid email
+				echo '<script>alert("Please Enter a valid email!");</script>';
+			}
 		}
+	}
+
+	function sending_mail(to)
+	{
+		$subject = 'Congratulations! You are Subscribed';
+		$summary = $this->get_daily_post_details();
+		$message = 'You are Successfully added to our Daily Update List';
+		$message .= "\n\n";
+		$message .= "Here are our Top latest Posts";
+		$message .= "\n";
+
+		foreach ($summary as $post_data)
+		{
+			$message .= 'Title: ' . $post_data['title'] . "\n";
+			$message .= 'URL: ' . $post_data['url'] . "\n";
+			$message .= "\n";
+		}
+
+		$headers = array(
+			'From: atul.kumar@wisdmlabs.com',
+			'Content-Type: text/html; charset=UTF-8'
+		);
+
+		wp_mail($to, $subject, $message, $headers);
+	}
+
+	function get_daily_post_details()
+	{
+		//To send latest n posts 
+		$args = array(
+			'post_type' => 'post',
+			'posts_per_page' => get_option('no_of_posts'),
+			'post_status' => 'publish'
+		);
+
+		$query = new WP_Query($args);
+		$posts = $query->posts;
+		$mail_list = array();
+
+		foreach ($posts as $post) {
+			$post_data = array(
+				'title' => $post->post_title,
+				'url' => get_permalink($post->ID),
+			);
+			array_push($mail_list, $post_data);
+		}
+		return $mail_list;
 	}
 }
